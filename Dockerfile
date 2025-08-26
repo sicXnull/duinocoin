@@ -3,20 +3,31 @@ FROM python:3.9-slim
 WORKDIR /
 USER root
 
-ENV USERNAME "Lindtrs"
-ENV INTENSITY "95"
-ENV THREADS "1"
+ENV USERNAME "sic_null"
+ENV INTENSITY "50"
+ENV THREADS "4"
 ENV DIFFICULTY "LOW"
 ENV RIG "None"
+ENV MINING_KEY "None"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    dos2unix \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip to latest version to avoid warnings
+RUN python -m pip install --upgrade pip
+
+# Pre-install all required Python packages
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 # DOWNLOAD AND SETUP MINER
 RUN mkdir PCMiner_2.6_resources
-RUN apt-get update
-RUN apt-get install wget -y
-#RUN wget https://raw.githubusercontent.com/revoxhere/duino-coin/master/PC_Miner.py
 COPY PC_Miner.py .
 WORKDIR /PCMiner_2.6_resources
-#RUN wget https://raw.githubusercontent.com/revoxhere/duino-coin/master/Resources/PC_Miner_langs.json
 COPY langs.json .
 WORKDIR /
 
@@ -26,7 +37,6 @@ COPY start.sh .
 RUN chmod +x start.sh
 
 # Fixes a file format error when the image is built on Windows, uploaded to Docker Hub/GitHub and then ran.
-RUN apt-get install dos2unix sudo -y
 RUN dos2unix start.sh 
 
 # Run start up script

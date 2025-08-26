@@ -1,41 +1,241 @@
-# duinocoin-docker
-A simple docker image containing the Duinocoin Miner! https://www.duinocoin.com/
+# Duino-Coin Docker Miner
 
-This image allows you to easily deploy a Duincoin miner with very little effort.
+A simple Docker image containing the official Duino-Coin PC Miner! 🪙
 
-## Configuration
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![Duino-Coin](https://img.shields.io/badge/Duino--Coin-Official-green.svg)](https://duinocoin.com/)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-sicnull%2Fduinocoin-blue.svg)](https://hub.docker.com/r/sicnull/duinocoin)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-- USERNAME: Your username
-- INTENSITY: Mining intensity
-- THREADS: Number of threads the miner will use (the more the faster)
-- DIFFICULTY: Hash difficulty
-- RIG: Rig Identifier (name of the rig)
+This Docker image allows you to easily deploy a Duino-Coin miner with minimal configuration. Perfect for running on servers, Raspberry Pi, or any Docker-compatible system.
 
-|   VARIABLE    | DEFAULT VALUE |       RANGE      |
-| ------------- | ------------- | ---------------- |
-|   USERNAME    |               |                  |
-|   INTENSITY   |      95       |       1-100      |
-|    THREADS    |       1       |                  |
-|   DIFFICULTY  |      LOW      | LOW, MEDIUM, NET |
-|      RIG      |               |                  |
+## 🚀 Quick Start
 
-## How to run
+### Basic Usage
+```bash
+docker run -e USERNAME="your_username" sicnull/duinocoin
+```
 
-- Example 1 (Minimal configuration): docker run -e USERNAME="Lindtrs" lindtrs/duinocoin
+### With Custom Configuration
+```bash
+docker run \
+  -e USERNAME="your_username" \
+  -e MINING_KEY="your_mining_key" \
+  -e INTENSITY="50" \
+  -e THREADS="4" \
+  -e DIFFICULTY="MEDIUM" \
+  -e RIG="MyDockerRig" \
+  --restart=always \
+  sicnull/duinocoin
+```
 
-Starts mining for Lindtrs, with intensity 95, using 1 thread and on low difficulty.
+## ⚙️ Configuration
 
-- Example 2: docker run -e USERNAME="Lindtrs" --restart=always lindtrs/duinocoin
+### Environment Variables
 
-Starts mining for Lindtrs, with intensity 95, using 1 thread and on low difficulty with restart option set to always, this means the container will automatically restart if it crashes.
+| Variable | Default | Range | Description |
+|----------|---------|-------|-------------|
+| `USERNAME` | `"sic_null"` | - | Your Duino-Coin username |
+| `MINING_KEY` | `"None"` | - | Your mining key (optional) |
+| `INTENSITY` | `"50"` | 1-100 | Mining intensity percentage |
+| `THREADS` | `"4"` | 1-16 | Number of CPU threads to use |
+| `DIFFICULTY` | `"LOW"` | LOW/MEDIUM/NET | Mining difficulty level |
+| `RIG` | `"None"` | - | Rig identifier name |
 
-- Example 3: docker run -e USERNAME="Lindtrs" -e INTENSITY="50" -e THREADS="4" -e DIFFICULTY="MEDIUM" -e RIG="MyDockerRig" --restart=always lindtrs/duinocoin
+### Difficulty Levels
 
-Starts mining for Lindtrs, with intensity 50, using 4 threads, on medium difficulty and with "MyDockerRig" as Rig identifier. When restart option is set to always, this means the container will automatically restart if it crashes.
+- **`LOW`**: Easiest difficulty, good for low-powered devices
+- **`MEDIUM`**: Balanced difficulty, recommended for most users
+- **`NET`**: Network difficulty, best for high-powered systems
 
-- Example 4: docker run --env-file env_vars --restart=always lindtrs/duinocoin
+## 📋 Examples
 
-Starts mining with the variables set in env_vars file (You can find an example of this file in GitHub). When restart option set to always, this means the container will automatically restart if it crashes.
+### Example 1: Minimal Configuration
+```bash
+docker run -e USERNAME="your_username" sicnull/duinocoin
+```
+Starts mining with default settings (50% intensity, 4 threads, LOW difficulty).
+
+### Example 2: With Auto-Restart
+```bash
+docker run \
+  -e USERNAME="your_username" \
+  --restart=always \
+  sicnull/duinocoin
+```
+Container will automatically restart if it crashes.
+
+### Example 3: High-Performance Configuration
+```bash
+docker run \
+  -e USERNAME="your_username" \
+  -e INTENSITY="95" \
+  -e THREADS="8" \
+  -e DIFFICULTY="NET" \
+  -e RIG="HighPerfRig" \
+  --restart=always \
+  sicnull/duinocoin
+```
+Optimized for high-performance mining.
+
+### Example 4: Using Environment File
+```bash
+# Create env_vars file
+cat > env_vars << EOF
+USERNAME=your_username
+MINING_KEY=your_mining_key
+INTENSITY=75
+THREADS=6
+DIFFICULTY=MEDIUM
+RIG=DockerRig
+EOF
+
+# Run with env file
+docker run --env-file env_vars --restart=always sicnull/duinocoin
+```
+
+### Example 5: Raspberry Pi Optimized
+```bash
+docker run \
+  -e USERNAME="your_username" \
+  -e INTENSITY="30" \
+  -e THREADS="2" \
+  -e DIFFICULTY="LOW" \
+  -e RIG="RaspberryPi" \
+  --restart=always \
+  sicnull/duinocoin
+```
+Optimized settings for Raspberry Pi devices.
+
+## 🔧 Advanced Usage
+
+### Docker Compose
+Create a `docker-compose.yml` file:
+
+```yaml
+version: '3.8'
+services:
+  duinocoin-miner:
+    image: sicnull/duinocoin
+    environment:
+      - USERNAME=your_username
+      - MINING_KEY=your_mining_key
+      - INTENSITY=75
+      - THREADS=4
+      - DIFFICULTY=MEDIUM
+      - RIG=DockerComposeRig
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 2G
+```
+
+Run with:
+```bash
+docker-compose up -d
+```
+
+### Resource Limits
+```bash
+docker run \
+  -e USERNAME="your_username" \
+  --cpus=4.0 \
+  --memory=2g \
+  --restart=always \
+  sicnull/duinocoin
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**1. Mining Key Error**
+```
+Error checking mining key: Incorrect padding
+```
+- Ensure your mining key is correct
+- If you don't have a mining key, leave `MINING_KEY="None"`
+
+**2. Container Exits Immediately**
+```bash
+# Check logs
+docker logs <container_name>
+
+# Run in foreground to see output
+docker run -it -e USERNAME="your_username" sicnull/duinocoin
+```
+
+**3. Low Hashrate**
+- Increase `THREADS` (up to 16)
+- Increase `INTENSITY` (up to 100)
+- Try higher `DIFFICULTY` level
+
+### Logs and Monitoring
+```bash
+# View logs
+docker logs <container_name>
+
+# Follow logs in real-time
+docker logs -f <container_name>
+
+# Check container stats
+docker stats <container_name>
+```
+
+## 📦 Building from Source
+
+### Prerequisites
+- Docker
+- Git
+
+### Build Steps
+```bash
+# Clone repository
+git clone <repository-url>
+cd duinocoin-docker
+
+# Build image
+docker build -t duinocoin-miner .
+
+# Run with your configuration
+docker run -e USERNAME="your_username" duinocoin-miner
+```
+
+## 🚀 Ready-to-Use Image
+
+If you don't want to build the image yourself, you can use the pre-built image from Docker Hub:
+
+```bash
+# Pull the latest image
+docker pull sicnull/duinocoin
+
+# Run with your configuration
+docker run -e USERNAME="your_username" sicnull/duinocoin
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- [Duino-Coin Official Website](https://duinocoin.com/)
+- [Duino-Coin GitHub](https://github.com/revoxhere/duino-coin)
+- [Docker Documentation](https://docs.docker.com/)
+
+## ⚠️ Disclaimer
+
+This Docker image is for educational and personal use. Please ensure you comply with your local regulations and Duino-Coin's terms of service when mining.
 
 
 

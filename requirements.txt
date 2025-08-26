@@ -1,0 +1,5 @@
+requests>=2.32.5
+colorama>=0.4.6
+py-cpuinfo>=9.0.0
+psutil>=7.0.0
+pypresence>=4.3.0
