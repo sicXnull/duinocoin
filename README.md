@@ -36,7 +36,7 @@ docker run \
 | Variable | Default | Range | Description |
 |----------|---------|-------|-------------|
 | `USERNAME` | `"sic_null"` | - | Your Duino-Coin username |
-| `MINING_KEY` | `"None"` | - | Your mining key (optional) |
+| `MINING_KEY` | `"None"` | - | Your mining key |
 | `INTENSITY` | `"50"` | 1-100 | Mining intensity percentage |
 | `THREADS` | `"4"` | 1-16 | Number of CPU threads to use |
 | `DIFFICULTY` | `"LOW"` | LOW/MEDIUM/NET | Mining difficulty level |
